@@ -1,0 +1,7 @@
+build
+.vscode
+node_modules
+.gitignore
+.nvmrc
+Makefile
+.git

@@ -1,0 +1,13 @@
+version: "3.1"
+
+services:
+  eaaldark:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: learnReact
+    volumes:
+      - ./:/app
+    ports:
+      - 3100:3100
+    tty: true
