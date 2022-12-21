@@ -55,11 +55,14 @@ export const taskSlice = createSlice({
       state.push(action.payload)
     },
     editTask: (state, action) => {
-      const { id, title, description } = action.payload
+      const { id, title, description, phone } = action.payload
       const foundTask = state.find((task) => task.id === id)
+      console.log(action.payload)
+
       if (foundTask) {
         foundTask.title = title
         foundTask.description = description
+        foundTask.phone = phone
       }
     },
     completeTask: (state, action) => {

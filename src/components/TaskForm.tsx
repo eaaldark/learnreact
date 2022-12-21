@@ -6,7 +6,7 @@ import { addTask, editTask } from "../reducers/tasks/taskSlice"
 import { v4 as uuid } from "uuid"
 
 const TasksForm = () => {
-  const [task, setTask] = useState<any>({})
+  const [task, setTask] = useState<any>()
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -19,8 +19,8 @@ const TasksForm = () => {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isValid },
-  } = useForm({ mode: "onChange" })
+    formState: { errors, isValid, isDirty },
+  } = useForm()
 
   const {
     fields: phoneFields,
@@ -39,7 +39,7 @@ const TasksForm = () => {
     })
   }
 
-  const onSubmit = () => {
+  const onSubmit = (d: any) => {
     let tempTask = task
     let phoneKeys = Object.keys(tempTask).filter((key) =>
       key.startsWith("phone."),
@@ -74,10 +74,8 @@ const TasksForm = () => {
   }, [params, tasks])
 
   useEffect(() => {
-    if (task) {
-      reset(task)
-    }
-  }, [reset, task])
+    if (!isDirty) reset(task)
+  }, [isDirty, reset, task])
 
   return (
     <form
@@ -87,7 +85,9 @@ const TasksForm = () => {
         <input
           id="title"
           type="text"
-          {...register("title", { onChange: handleChange, value: task?.title })}
+          {...register("title", {
+            onChange: handleChange,
+          })}
           className="bg-transparent peer h-10 w-80 border-b-2 border-gray-300 text-white placeholder-transparent focus:outline-none focus:border-rose-600"
           placeholder="Write a title"
         />
@@ -102,7 +102,6 @@ const TasksForm = () => {
           id="description"
           {...register("description", {
             onChange: handleChange,
-            value: task?.description,
           })}
           className="bg-transparent peer h-10 w-80 border-b-2 border-gray-300 text-white placeholder-transparent focus:outline-none focus:border-rose-600"
           placeholder="Write a description"
@@ -135,7 +134,6 @@ const TasksForm = () => {
             })}
             className="bg-transparent peer h-10 w-80 border-b-2 border-gray-300 text-white placeholder-transparent focus:outline-none focus:border-rose-600"
             placeholder={`Phone Number ${index + 1}`}
-            defaultValue={field?.number}
           />
           <label
             htmlFor={`phone.${index}.number`}

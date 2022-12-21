@@ -15,7 +15,6 @@ const TasksList = () => {
   const handleComplete = (id: string) => {
     dispatch(completeTask(id))
   }
-  console.log(tasks)
   return (
     <div className="w-4/6">
       <header className="flex justify-between items-center py-4">

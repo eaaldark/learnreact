@@ -5,8 +5,6 @@ export const store = configureStore({
   reducer: { tasks: tasksReducer },
 })
 
-console.log(store)
-
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 export type AppThunk<ReturnType = void> = ThunkAction<
