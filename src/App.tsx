@@ -1,26 +1,30 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import TaskForm from "./components/TaskForm"
-import TasksList from "./components/TasksList"
+import { BrowserRouter } from "react-router-dom"
+import { useAppSelector, useAppDispatch } from "./app/hooks"
+import { viewMode } from "./reducers/global/globalSlice"
+
 import "./App.scss"
-import WelcomeReact from "./pages/WelcomeReact"
+import General from "./router"
+import Sidebar from "./components/Sidebar"
 
 const App = () => {
+  const viewM = useAppSelector((state) => {
+    return state.global
+  })
+
+  console.log("App.tsx", viewM)
+  const dispatch = useAppDispatch()
+
+  const handleComplete = () => {
+    dispatch(viewMode(viewM))
+  }
+
   return (
-    <div className="bg-zinc-900 h-screen text-white">
-      <div className="flex flex-col gap-4 items-center justify-center h-full">
-        {/* <WelcomeReact /> */}
-        <h1 className="text-5xl">Tasks App</h1>
-        <p>Create with CRA, Typescript, TailwindCSS, Redux, Redux Toolkit</p>
-        <BrowserRouter>
-          <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
-            <Route path="/" element={<TasksList />} />
-            <Route path="/create-task" element={<TaskForm />} />
-            <Route path="/edit-task/:id" element={<TaskForm />} />
-          </Routes>
-        </BrowserRouter>
+    <BrowserRouter>
+      <div className="w-full flex flex-row bg-zinc-700 h-screen text-white">
+        <Sidebar authView={viewM[0].authView} handleComplete={handleComplete} />
+        <General authView={viewM[0].authView} handleComplete={handleComplete} />
       </div>
-    </div>
+    </BrowserRouter>
   )
 }
 
