@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { useForm, Controller, useFieldArray } from "react-hook-form"
-import { useNavigate, useParams } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { addTask, editTask } from "../reducers/tasks/taskSlice"
-import { v4 as uuid } from "uuid"
+import React, { useEffect, useState } from "react";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { addTask, editTask } from "../reducers/tasks/taskSlice";
+import { v4 as uuid } from "uuid";
 
 const TasksForm = () => {
-  const [task, setTask] = useState<any>()
+  const [task, setTask] = useState<any>();
 
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const params = useParams()
-  const tasks: any = useAppSelector((state) => state.tasks)
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
+  const tasks: any = useAppSelector((state) => state.tasks);
 
   const {
     register,
@@ -20,7 +20,7 @@ const TasksForm = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid, isDirty },
-  } = useForm()
+  } = useForm();
 
   const {
     fields: phoneFields,
@@ -29,27 +29,27 @@ const TasksForm = () => {
   } = useFieldArray({
     control,
     name: "phone",
-  })
+  });
 
   const handleChange = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     setTask({
       ...task,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const onSubmit = (d: any) => {
-    let tempTask = task
+    let tempTask = task;
     let phoneKeys = Object.keys(tempTask).filter((key) =>
-      key.startsWith("phone."),
-    )
-    let phoneNumbers = phoneKeys.map((key) => ({ number: tempTask[key] }))
-    tempTask.phone = phoneNumbers
-    phoneKeys.forEach((key) => delete tempTask[key])
+      key.startsWith("phone.")
+    );
+    let phoneNumbers = phoneKeys.map((key) => ({ number: tempTask[key] }));
+    tempTask.phone = phoneNumbers;
+    phoneKeys.forEach((key) => delete tempTask[key]);
 
     if (params.id) {
-      dispatch(editTask({ ...tempTask, id: params.id }))
+      dispatch(editTask({ ...tempTask, id: params.id }));
     } else {
       dispatch(
         addTask({
@@ -57,25 +57,25 @@ const TasksForm = () => {
           createAt: new Date().toISOString(),
           completed: false,
           id: uuid(),
-        }),
-      )
+        })
+      );
     }
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   const handleBack = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   useEffect(() => {
     if (params.id) {
-      setTask(tasks.find((task: any) => task.id === params.id))
+      setTask(tasks.find((task: any) => task.id === params.id));
     }
-  }, [params, tasks])
+  }, [params, tasks]);
 
   useEffect(() => {
-    if (!isDirty) reset(task)
-  }, [isDirty, reset, task])
+    if (!isDirty) reset(task);
+  }, [isDirty, reset, task]);
 
   return (
     <form
@@ -164,7 +164,7 @@ const TasksForm = () => {
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default TasksForm
+export default TasksForm;
